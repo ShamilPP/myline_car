@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "413840846365",
+    "firebase_url": "https://myline-a60c1.firebaseio.com",
+    "project_id": "myline-a60c1",
+    "storage_bucket": "myline-a60c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413840846365:android:9f0feecc07c674033b20f4",
+        "android_client_info": {
+          "package_name": "com.goodone.my_line"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu_oEzjTwRx12rQy_6IfRea6H3gvzlxhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413840846365:android:951a4a7203e4f5723b20f4",
+        "android_client_info": {
+          "package_name": "com.goodone.myline_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu_oEzjTwRx12rQy_6IfRea6H3gvzlxhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413840846365:android:4360b252d01208ba3b20f4",
+        "android_client_info": {
+          "package_name": "com.goodone.myline_car"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu_oEzjTwRx12rQy_6IfRea6H3gvzlxhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413840846365-1rv7svko5jvk681v42b3m01h7a7ffgfj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
