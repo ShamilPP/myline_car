@@ -106,6 +106,8 @@ class OrderListCard extends StatelessWidget {
         return 'Accepted';
       case OrderStatus.rejected:
         return 'Rejected';
+      case OrderStatus.done:
+        return 'Done';
     }
     return '';
   }

@@ -38,9 +38,9 @@ class FirebaseService {
       for (var user in users.docs) {
         if (user.get('userType') == UserType.car_owner) {
           return Result.success(User(
-            id: users.docs.first.id,
-            name: users.docs.first.get('name'),
-            phone: users.docs.first.get('phone'),
+            id: user.id,
+            name: user.get('name'),
+            phone: user.get('phone'),
           ));
         }
       }
