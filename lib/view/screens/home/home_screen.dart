@@ -3,6 +3,7 @@ import 'package:myline_car/model/result.dart';
 import 'package:myline_car/view/screens/car/car_screen.dart';
 import 'package:myline_car/view/screens/order/orders_screen.dart';
 import 'package:myline_car/view/screens/profile/profile_screen.dart';
+import 'package:myline_car/view/widgets/loading_network_image.dart';
 import 'package:myline_car/view_model/cars_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MyLine'),
+        // backgroundColor: colors.bgColor,
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -37,58 +39,93 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<CarsProvider>(builder: (ctx, provider, child) {
-        if (provider.cars.status == Status.success) {
-          var cars = provider.cars.data!;
-          if (cars.isNotEmpty) {
-            return SingleChildScrollView(
-              child: Column(
+      body: Consumer<CarsProvider>(
+        builder: (ctx, provider, child) {
+          if (provider.cars.status == Status.success) {
+            var cars = provider.cars.data!;
+            if (cars.isNotEmpty) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Text("Cars(${cars.length})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                    padding: const EdgeInsets.only(bottom: 10, top: 20, right: 15, left: 15),
+                    child: Text("Your Vehicles: ${cars.length}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                   ),
-                  ListView.separated(
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: cars.length,
-                      separatorBuilder: (ctx, index) => const Divider(height: 0),
-                      itemBuilder: (ctx, index) {
-                        var car = cars[index];
-                        return ListTile(
-                          title: Text(
-                            car.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => CarScreen(car: car)));
-                          },
-                        );
-                      }),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: ListView.builder(
+                        itemCount: cars.length,
+                        itemBuilder: (ctx, index) {
+                          var car = cars[index];
+                          return Card(
+                            elevation: 5, // Shadow elevation
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => CarScreen(car: car)),
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(12),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: LoadingNetworkImage(
+                                          car.images.first,
+                                          height: 30,
+                                          width: 40,
+                                          fit: BoxFit.cover,
+                                        )),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        car.name,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            );
-          } else {
-            return const Center(
+              );
+            } else {
+              return const Center(
                 child: Text(
-              'No cars',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ));
+                  'No cars',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              );
+            }
+          } else if (provider.cars.status == Status.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (provider.cars.status == Status.loading) {
+            return Center(child: Text(provider.cars.message.toString()));
+          } else {
+            return const SizedBox();
           }
-        } else if (provider.cars.status == Status.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (provider.cars.status == Status.loading) {
-          return Center(child: Text(provider.cars.message.toString()));
-        } else {
-          return const SizedBox();
-        }
-      }),
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) => const CarScreen()));
         },
         child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

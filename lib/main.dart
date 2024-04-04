@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:myline_car/utils/colors.dart';
+import 'package:myline_car/utils/theme.dart';
 import 'package:myline_car/view/screens/splash/splash_screen.dart';
 import 'package:myline_car/view_model/cars_provider.dart';
 import 'package:myline_car/view_model/orders_provider.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'MyLine - Car',
-        theme: ThemeData(primarySwatch: colors.primarySwatch, useMaterial3: false),
+        theme: MyLineTheme.lightThemeData(),
         home: const SplashScreen(),
       ),
     );
