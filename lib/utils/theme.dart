@@ -3,10 +3,7 @@ import 'package:myline_car/utils/colors.dart';
 
 class MyLineTheme {
   static ThemeData lightThemeData() {
-    return ThemeData(
-      colorSchemeSeed: colors.primaryColor,
-      appBarTheme: AppBarTheme(color: colors.primaryColor,foregroundColor: colors.foreColor)
-    );
+    return ThemeData(colorSchemeSeed: colors.primaryColor, appBarTheme: AppBarTheme(color: colors.primaryColor, foregroundColor: colors.foreColor));
   }
 
   static ThemeData darkThemeData() {

@@ -24,12 +24,14 @@ class OrdersProvider extends ChangeNotifier {
         }
         _orders = result;
         _orders.data = myOrders;
+        _orders.data!.sort((a, b) => b.orderTime.compareTo(a.orderTime));
       }
       notifyListeners();
     });
   }
 
-  updateCarOrderStatus(OrderItem order) {
+  updateCarOrderStatus(OrderItem order, int orderStatus) {
+    order.status = orderStatus;
     FirebaseService.updateCarOrderStatus(order);
     int orderIndex = _orders.data!.indexWhere((element) => element.id == order.id);
     _orders.data![orderIndex].status = order.status;

@@ -102,7 +102,7 @@ class FirebaseService {
   static Future<Result<List<OrderItem>>> getAllCarOrders() async {
     try {
       List<OrderItem> orders = [];
-      var collection = FirebaseFirestore.instance.collectionGroup("orders").where("type", isEqualTo: OrderType.car);
+      var collection = FirebaseFirestore.instance.collectionGroup("orders").where("type", isEqualTo: OrderType.car).orderBy("orderTime", descending: true);
       var allDocs = await collection.get();
       for (var doc in allDocs.docs) {
         orders.add(OrderItem(

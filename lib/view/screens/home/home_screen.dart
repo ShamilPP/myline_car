@@ -59,8 +59,8 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (ctx, index) {
                           var car = cars[index];
                           return Card(
-                            elevation: 5, // Shadow elevation
-                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            elevation: 4, // Shadow elevation
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -112,8 +112,8 @@ class HomeScreen extends StatelessWidget {
             }
           } else if (provider.cars.status == Status.loading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (provider.cars.status == Status.loading) {
-            return Center(child: Text(provider.cars.message.toString()));
+          } else if (provider.cars.status == Status.error) {
+            return Center(child: Text(provider.cars.message!));
           } else {
             return const SizedBox();
           }
