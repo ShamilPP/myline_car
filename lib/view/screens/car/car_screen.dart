@@ -19,7 +19,7 @@ class CarScreen extends StatefulWidget {
 }
 
 class _CarScreenState extends State<CarScreen> {
-  String? imageUrl, imageUrl2, imageUrl3, name, phone, year, price, type, km;
+  String? imageUrl, imageUrl2, imageUrl3, name, phone, place, year, km;
 
   @override
   void initState() {
@@ -29,9 +29,8 @@ class _CarScreenState extends State<CarScreen> {
       imageUrl3 = widget.car!.images[2];
       name = widget.car!.name;
       // phone = widget.car!.phone;
+      place = widget.car!.place;
       year = widget.car!.year;
-      price = widget.car!.price;
-      type = widget.car!.type;
       km = widget.car!.km;
     }
     User? user = Provider.of<UserProvider>(context, listen: false).user;
@@ -77,20 +76,11 @@ class _CarScreenState extends State<CarScreen> {
               },
             ),
             CarDetailsItem(
-              title: 'Price',
-              content: price,
+              title: 'Place',
+              content: place,
               onUpdate: (result) {
                 setState(() {
-                  price = result;
-                });
-              },
-            ),
-            CarDetailsItem(
-              title: 'Type',
-              content: type,
-              onUpdate: (result) {
-                setState(() {
-                  type = result;
+                  place = result;
                 });
               },
             ),
@@ -153,11 +143,19 @@ class _CarScreenState extends State<CarScreen> {
               imageUrl3?.isNotEmpty == true &&
               name?.isNotEmpty == true &&
               phone?.isNotEmpty == true &&
-              price?.isNotEmpty == true &&
-              type?.isNotEmpty == true &&
+              place?.isNotEmpty == true &&
               year?.isNotEmpty == true &&
               km?.isNotEmpty == true) {
-            Car car = Car(name: name!, phone: phone!, price: price!, type: type!, year: year!, km: km!, thumbUrl: imageUrl!, images: [imageUrl!, imageUrl2!, imageUrl3!]);
+            Car car = Car(
+              name: name!,
+              phone: phone!,
+              place: place!,
+              year: year!,
+              km: km!,
+              thumbUrl: imageUrl!,
+              images: [imageUrl!, imageUrl2!, imageUrl3!],
+              createdTime: DateTime.now(),
+            );
             showDialog(context: context, builder: (_) => const Center(child: CircularProgressIndicator()));
             //if car is null that's mean creating new car
             late Result<Car> result;

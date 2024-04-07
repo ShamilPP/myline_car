@@ -86,10 +86,9 @@ class FirebaseService {
             km: car.get('km'),
             images: List<String>.from(car.get('images')),
             phone: car.get('phone'),
-            price: car.get('price'),
-            type: car.get('type'),
+            place: car.get('price'),
             year: car.get('year'),
-            thumbUrl: car.get('thumbUrl'),
+            thumbUrl: car.get('thumbUrl'), createdTime: car.get('orderTime').toDate(),
           ));
         }
       }
@@ -163,10 +162,10 @@ class FirebaseService {
           'images': car.images,
           'name': car.name,
           'phone': car.phone,
-          'price': car.price,
-          'type': car.type,
+          'price': car.place,
           'year': car.year,
           'km': car.km,
+          'orderTime':car.createdTime,
         });
         car.id = result.id;
         return Result.success(car);
@@ -184,8 +183,7 @@ class FirebaseService {
       await cars.doc(car.id).update({
         'name': car.name,
         'phone': car.phone,
-        'price': car.price,
-        'type': car.type,
+        'place': car.place,
         'year': car.year,
         'km': car.km,
       });

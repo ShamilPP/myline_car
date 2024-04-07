@@ -18,13 +18,12 @@ class OrdersProvider extends ChangeNotifier {
     FirebaseService.getAllCarOrders().then((result) {
       List<OrderItem> myOrders = [];
       if (result.status == Status.success && cars.status == Status.success) {
-        for (var car in cars.data!) {
-          var matchedOrder = result.data!.where((order) => order.carId == car.id);
-          myOrders.addAll(matchedOrder);
+        for (var order in result.data!) {
+          bool matchedOrder = cars.data!.any((car) => car.id == order.carId);
+          if (matchedOrder) myOrders.add(order);
         }
         _orders = result;
         _orders.data = myOrders;
-        _orders.data!.sort((a, b) => b.orderTime.compareTo(a.orderTime));
       }
       notifyListeners();
     });
