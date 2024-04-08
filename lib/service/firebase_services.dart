@@ -86,9 +86,10 @@ class FirebaseService {
             km: car.get('km'),
             images: List<String>.from(car.get('images')),
             phone: car.get('phone'),
-            place: car.get('price'),
+            place: car.get('place'),
             year: car.get('year'),
-            thumbUrl: car.get('thumbUrl'), createdTime: car.get('orderTime').toDate(),
+            thumbUrl: car.get('thumbUrl'),
+            createdTime: car.get('createdTime').toDate(),
           ));
         }
       }
@@ -162,10 +163,10 @@ class FirebaseService {
           'images': car.images,
           'name': car.name,
           'phone': car.phone,
-          'price': car.place,
+          'place': car.place,
           'year': car.year,
           'km': car.km,
-          'orderTime':car.createdTime,
+          'createdTime': car.createdTime,
         });
         car.id = result.id;
         return Result.success(car);
