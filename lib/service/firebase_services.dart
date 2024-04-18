@@ -81,16 +81,13 @@ class FirebaseService {
       for (var car in allDocs.docs) {
         if (car.get('phone') == phone) {
           cars.add(Car(
-            id: car.id,
-            name: car.get('name'),
-            km: car.get('km'),
-            images: List<String>.from(car.get('images')),
-            phone: car.get('phone'),
-            place: car.get('place'),
-            year: car.get('year'),
-            thumbUrl: car.get('thumbUrl'),
-            createdTime: car.get('createdTime').toDate(),
-          ));
+              id: car.id,
+              image: car.get('img'),
+              name: car.get('name'),
+              phone: phone,
+              places: List<String>.from(car.get('places')),
+              location: car.get('location'),
+              createdTime: car.get('createdTime').toDate()));
         }
       }
       return Result.success(cars);
@@ -139,40 +136,34 @@ class FirebaseService {
   static Future<Result<Car>> createNewCar(Car car) async {
     try {
       var cars = FirebaseFirestore.instance.collection('cars');
-      List<String> imagesUrls = [];
-      // Images Upload
-      for (var image in car.images) {
-        // Set image name
-        String imageExtension = image.substring(image.lastIndexOf("."));
-        String imageName = Helper.commonImageName(imageExtension);
-        String storePath = 'cars/$imageName';
-        // Upload image to firebase storage
-        Result<String> imageUrl = await uploadImage(image, storePath);
-        // to add image list
-        if (imageUrl.data != null && imageUrl.status == Status.success) imagesUrls.add(imageUrl.data!);
-      }
-      // Verifying all uploaded images for accuracy and compliance
-      if (car.images.length == imagesUrls.length) {
-        //Set image urls to car images
-        car.images = imagesUrls;
-        car.thumbUrl = imagesUrls.first;
 
-        //Then upload
-        var result = await cars.add({
-          'thumbUrl': car.thumbUrl,
-          'images': car.images,
-          'name': car.name,
-          'phone': car.phone,
-          'place': car.place,
-          'year': car.year,
-          'km': car.km,
-          'createdTime': car.createdTime,
-        });
-        car.id = result.id;
-        return Result.success(car);
+      String image = car.image;
+      late String imgUrl;
+
+      String imageExtension = image.substring(image.lastIndexOf("."));
+      String imageName = Helper.commonImageName(imageExtension);
+      String storePath = 'cars/$imageName';
+      // Upload image to firebase storage
+      Result<String> imageResult = await uploadImage(image, storePath);
+      // to add image list
+      if (imageResult.data != null && imageResult.status == Status.success) {
+        imgUrl = imageResult.data!;
       } else {
-        return Result.error('Image uploading error');
+        return Result.error('Image uploading failed');
       }
+
+      //Then upload
+      var result = await cars.add({
+        'img': imgUrl,
+        'name': car.name,
+        'phone': car.phone,
+        'places': car.places,
+        'location': car.location,
+        'createdTime': car.createdTime,
+      });
+      car.id = result.id;
+      car.image = imgUrl;
+      return Result.success(car);
     } catch (e) {
       return Result.error('$e');
     }
@@ -182,11 +173,12 @@ class FirebaseService {
     try {
       var cars = FirebaseFirestore.instance.collection('cars');
       await cars.doc(car.id).update({
+        'img': car.image,
         'name': car.name,
         'phone': car.phone,
-        'place': car.place,
-        'year': car.year,
-        'km': car.km,
+        'places': car.places,
+        'location': car.location,
+        'createdTime': car.createdTime,
       });
       return Result.success(car);
     } catch (e) {

@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                                     ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: LoadingNetworkImage(
-                                          car.images.first,
+                                          car.image,
                                           height: 30,
                                           width: 40,
                                           fit: BoxFit.cover,
