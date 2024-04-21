@@ -11,7 +11,7 @@ class CarsProvider extends ChangeNotifier {
 
   void loadCars(String phone) async {
     // Search own car by phone number
-    _cars = await FirebaseService.getCarByPhone(phone);
+    _cars = await FirebaseService.getCarsByPhone(phone);
     notifyListeners();
   }
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,7 +28,7 @@ class CarScreen extends StatefulWidget {
 class _CarScreenState extends State<CarScreen> {
   String? image, phone;
   TextEditingController nameController = TextEditingController();
-  List<String> places = [];
+  List<String> places = ["affa", "mhdsmhasfsafjz", "has"];
 
   GeoPoint? location;
   String? locationName;
@@ -35,16 +36,25 @@ class _CarScreenState extends State<CarScreen> {
 
   @override
   void initState() {
+    User? user = Provider.of<UserProvider>(context, listen: false).user;
+    if (user != null) {
+      phone = user.phone;
+    }
     if (widget.car != null) {
       image = widget.car!.image;
       nameController.text = widget.car!.name;
       // phone = widget.car!.phone;
       places = widget.car!.places;
+
+      // Load location name
+      isFetchingLocation = true;
+      updateLocationName(widget.car!.location.latitude, widget.car!.location.longitude).then((value) {
+        setState(() {
+          isFetchingLocation = false;
+        });
+      });
     }
-    User? user = Provider.of<UserProvider>(context, listen: false).user;
-    if (user != null) {
-      phone = user.phone;
-    }
+
     super.initState();
   }
 
@@ -138,7 +148,7 @@ class _CarScreenState extends State<CarScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        locationName ?? 'Click "GPS" Button',
+                        isFetchingLocation ? 'Loading' : locationName ?? 'Click "GPS" Button',
                         style: const TextStyle(fontSize: 18),
                       ),
                     ),
@@ -178,11 +188,34 @@ class _CarScreenState extends State<CarScreen> {
                   ...places.map((String item) {
                     return Container(
                         decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer, borderRadius: BorderRadius.circular(10)),
-                        child: Center(
-                            child: Text(
-                          item,
-                          style: const TextStyle(fontWeight: FontWeight.w500),
-                        )));
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: AutoSizeText(
+                                  item,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  minFontSize: 12,
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    places.remove(item);
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  size: 20,
+                                ),
+                                padding: EdgeInsets.zero)
+                          ],
+                        ));
                   }).toList(),
                   IconButton(
                       onPressed: addNewPlace,
@@ -197,8 +230,7 @@ class _CarScreenState extends State<CarScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        // backgroundColor: ,
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           String name = nameController.text;
           if (image?.isNotEmpty == true && name.isNotEmpty == true && phone?.isNotEmpty == true && location != null) {
@@ -232,7 +264,9 @@ class _CarScreenState extends State<CarScreen> {
             Fluttertoast.showToast(msg: 'Fill all boxes', backgroundColor: Colors.red);
           }
         },
-        child: const Icon(Icons.save),
+        label: Text(widget.car != null ? 'Update' : 'Save'),
+        tooltip: widget.car != null ? 'Update' : 'Save',
+        icon: const Icon(Icons.save),
       ),
     );
   }
@@ -244,12 +278,16 @@ class _CarScreenState extends State<CarScreen> {
     await Helper.turnOnLocation();
     Position position = await Geolocator.getCurrentPosition();
     location = GeoPoint(position.latitude, position.longitude);
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks[0];
-    locationName = "${place.locality}, ${place.postalCode}, ${place.country}";
+    await updateLocationName(position.latitude, position.longitude);
     setState(() {
       isFetchingLocation = false;
     });
+  }
+
+  Future<void> updateLocationName(double latitude, double longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    locationName = "${place.locality}, ${place.postalCode}, ${place.country}";
   }
 
   addNewPlace() {

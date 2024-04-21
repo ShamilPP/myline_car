@@ -72,24 +72,23 @@ class FirebaseService {
     }
   }
 
-  static Future<Result<List<Car>>> getCarByPhone(String phone) async {
+  static Future<Result<List<Car>>> getCarsByPhone(String phone) async {
     try {
       List<Car> cars = [];
 
       var collection = FirebaseFirestore.instance.collection('cars');
       var allDocs = await collection.get();
       for (var car in allDocs.docs) {
-        if (car.get('phone') == phone) {
-          cars.add(Car(
-              id: car.id,
-              image: car.get('img'),
-              name: car.get('name'),
-              phone: phone,
-              places: List<String>.from(car.get('places')),
-              location: car.get('location'),
-              createdTime: car.get('createdTime').toDate()));
-        }
+        cars.add(Car(
+            id: car.id,
+            image: car.get('img'),
+            name: car.get('name'),
+            phone: phone,
+            places: List<String>.from(car.get('places')),
+            location: car.get('location'),
+            createdTime: car.get('createdTime').toDate()));
       }
+
       return Result.success(cars);
     } catch (e) {
       return Result.error('$e');
