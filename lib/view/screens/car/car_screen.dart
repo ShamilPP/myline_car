@@ -28,7 +28,7 @@ class CarScreen extends StatefulWidget {
 class _CarScreenState extends State<CarScreen> {
   String? image, phone;
   TextEditingController nameController = TextEditingController();
-  List<String> places = ["affa", "mhdsmhasfsafjz", "has"];
+  List<String> places = [];
 
   GeoPoint? location;
   String? locationName;
