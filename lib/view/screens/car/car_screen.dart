@@ -72,13 +72,14 @@ class _CarScreenState extends State<CarScreen> {
             Center(
               child: Container(
                 margin: const EdgeInsets.only(top: 20, bottom: 10),
-                height: 130,
-                width: 120,
+                height: 140,
+                width: 140,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 3),
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(color: Colors.black, width: 2),
+                  shape: BoxShape.circle,
                 ),
                 child: InkWell(
+                  borderRadius: BorderRadius.circular(100),
                   onTap: () async {
                     if (image == null) {
                       final ImagePicker picker = ImagePicker();
@@ -92,11 +93,24 @@ class _CarScreenState extends State<CarScreen> {
                       Fluttertoast.showToast(msg: 'Unable to update the image during the updating process.');
                     }
                   },
-                  child: image != null
-                      ? image!.isLink
-                          ? Image.network(image!, loadingBuilder: Helper.imageLoadingBuilder)
-                          : Image.file(File(image!))
-                      : const SizedBox(),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: image != null
+                        ? image!.isLink
+                            ? Image.network(image!, fit: BoxFit.cover, loadingBuilder: Helper.imageLoadingBuilder)
+                            : Image.file(File(image!), fit: BoxFit.fill)
+                        : const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo,
+                                color: Colors.grey,
+                                size: 18,
+                              ),
+                              Text('Add a photo', style: TextStyle(color: Colors.grey, fontSize: 10)),
+                            ],
+                          ),
+                  ),
                 ),
               ),
             ),
