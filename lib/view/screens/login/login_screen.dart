@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:myline_car/utils/colors.dart';
 import 'package:myline_car/view/screens/login/otp_verification_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../../../model/result.dart';
+import '../../../view_model/firebase_auth_provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -96,7 +100,14 @@ class LoginSection extends StatelessWidget {
               onPressed: () async {
                 int? phone = int.tryParse(phoneController.text);
                 if (phone != null && phoneController.text.length == 10) {
-                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => OtpVerificationScreen(phone: phone!)));
+                  showDialog(context: context, builder: (_) => const Center(child: CircularProgressIndicator()));
+                  var result = await Provider.of<FirebaseAuthProvider>(context, listen: false).sendOTP(phone);
+                  if (result.status == Status.success) {
+                    String verificationId = result.data!;
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => OtpVerificationScreen(phone: phone, verificationId: verificationId)));
+                  } else {
+                    Fluttertoast.showToast(msg: 'Failed : ${result.message}');
+                  }
                 } else {
                   Fluttertoast.showToast(msg: 'Failed to enter phone number. Please try again', backgroundColor: Colors.red);
                 }

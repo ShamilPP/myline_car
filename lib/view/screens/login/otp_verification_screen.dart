@@ -7,23 +7,11 @@ import 'package:myline_car/view_model/firebase_auth_provider.dart';
 import 'package:myline_car/view_model/user_provider.dart';
 import 'package:provider/provider.dart';
 
-class OtpVerificationScreen extends StatefulWidget {
+class OtpVerificationScreen extends StatelessWidget {
   final int phone;
+  final String verificationId;
 
-  const OtpVerificationScreen({super.key, required this.phone});
-
-  @override
-  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
-}
-
-class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  String? verificationId;
-
-  @override
-  void initState() {
-    sendOtp();
-    super.initState();
-  }
+  const OtpVerificationScreen({super.key, required this.phone, required this.verificationId});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +43,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               showFieldAsBox: true,
               focusedBorderColor: colors.primaryColor,
               onSubmit: (otp) {
-                authenticate(otp);
+                authenticate(context, otp);
               },
             ),
             const Spacer(),
@@ -80,27 +68,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
-  void sendOtp() async {
-    var result = await Provider.of<FirebaseAuthProvider>(context, listen: false).sendOTP(widget.phone);
+  void authenticate(BuildContext context, String otp) async {
+    showDialog(context: context, builder: (_) => const Center(child: CircularProgressIndicator()));
+    var result = await Provider.of<FirebaseAuthProvider>(context, listen: false).authenticate(verificationId, otp);
     if (result.status == Status.success) {
-      verificationId = result.data!;
-      Fluttertoast.showToast(msg: "OTP Sent");
+      Provider.of<UserProvider>(context, listen: false).login(context, phone);
     } else {
       Fluttertoast.showToast(msg: 'Failed : ${result.message}');
-    }
-  }
-
-  void authenticate(String otp) async {
-    showDialog(context: context, builder: (_) => const Center(child: CircularProgressIndicator()));
-    if (verificationId != null) {
-      var result = await Provider.of<FirebaseAuthProvider>(context, listen: false).authenticate(verificationId!, otp);
-      if (result.status == Status.success) {
-        Provider.of<UserProvider>(context, listen: false).login(context, widget.phone);
-      } else {
-        Fluttertoast.showToast(msg: 'Failed : ${result.message}');
-      }
-    } else {
-      Fluttertoast.showToast(msg: 'Failed to send OTP. Please verify the phone number and try again');
     }
     Navigator.pop(context);
   }
