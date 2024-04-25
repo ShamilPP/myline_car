@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:myline_car/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -16,37 +17,42 @@ class ProfileScreen extends StatelessWidget {
       body: Column(
         children: [
           // User profile photo
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Center(
-              child: Stack(
-                children: [
-                  const Icon(
-                    Icons.account_circle,
-                    size: 130,
-                    color: Colors.grey,
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: colors.primaryColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 4,
+          GestureDetector(
+            onTap: () {
+              Fluttertoast.showToast(msg: "Currently you can't add profile picture");
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Center(
+                child: Stack(
+                  children: [
+                    const Icon(
+                      Icons.account_circle,
+                      size: 130,
+                      color: Colors.grey,
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: colors.primaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 4,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.edit,
                           color: Colors.white,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -88,12 +94,12 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Text(
             subText,
-            style: const TextStyle(fontSize: 15, color: Colors.grey),
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
           const SizedBox(height: 5),
           Text(
             text,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const Divider(
             thickness: 1,

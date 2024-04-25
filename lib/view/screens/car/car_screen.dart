@@ -63,7 +63,14 @@ class _CarScreenState extends State<CarScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.car != null ? widget.car!.name : "Create new car"),
-        actions: [if (widget.car != null) IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
+        actions: [
+          if (widget.car != null)
+            IconButton(
+                onPressed: () {
+                  deleteCar();
+                },
+                icon: const Icon(Icons.delete))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -367,5 +374,10 @@ class _CarScreenState extends State<CarScreen> {
             ),
           );
         });
+  }
+
+  void deleteCar() {
+    Provider.of<CarsProvider>(context, listen: false).deleteCar(widget.car!);
+    Navigator.pop(context);
   }
 }

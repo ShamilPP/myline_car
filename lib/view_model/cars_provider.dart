@@ -33,4 +33,10 @@ class CarsProvider extends ChangeNotifier {
     }
     return result;
   }
+
+  void deleteCar(Car car) async {
+    _cars.data!.remove(car);
+    notifyListeners();
+    FirebaseService.deleteCar(car);
+  }
 }

@@ -221,4 +221,22 @@ class FirebaseService {
       return Result.error(e.toString());
     }
   }
+
+  static Future<Result<bool>> deleteCar(Car car) async {
+    try {
+      await deleteImage(car.image);
+      var cars = FirebaseFirestore.instance.collection('cars');
+      cars.doc(car.id).delete();
+      return Result.success(true);
+    } catch (e) {
+      return Result.error(e.toString());
+    }
+  }  static Future<Result<bool>> deleteImage(String url) async {
+    try {
+      await FirebaseStorage.instance.refFromURL(url).delete();
+      return Result.success(true);
+    } catch (e) {
+      return Result.error(e.toString());
+    }
+  }
 }
