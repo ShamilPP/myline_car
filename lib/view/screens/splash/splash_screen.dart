@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myline_car/view/screens/login/login_screen.dart';
 import 'package:myline_car/view_model/cars_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../model/user.dart';
 import '../../../view_model/user_provider.dart';
 import '../home/home_screen.dart';
-import '../profile/profile_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Provider.of<UserProvider>(context, listen: false).loadAllUsers();
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
       } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ProfileScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
       }
     });
   }

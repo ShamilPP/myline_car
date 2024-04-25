@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       User user = User(name: txtNameCtrl.text, phone: txtPhoneCtrl.text);
       var provider = Provider.of<UserProvider>(context, listen: false);
       if (provider.user == null) {
-        await Provider.of<UserProvider>(context, listen: false).saveUser(user);
+        // await Provider.of<UserProvider>(context, listen: false).saveUser(user);
       } else {
         user.id = provider.user?.id;
         await Provider.of<UserProvider>(context, listen: false).updateUser(user);

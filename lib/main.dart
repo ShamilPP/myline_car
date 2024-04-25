@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myline_car/utils/theme.dart';
 import 'package:myline_car/view/screens/splash/splash_screen.dart';
 import 'package:myline_car/view_model/cars_provider.dart';
+import 'package:myline_car/view_model/firebase_auth_provider.dart';
 import 'package:myline_car/view_model/orders_provider.dart';
 import 'package:myline_car/view_model/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CarsProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
