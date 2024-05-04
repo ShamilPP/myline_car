@@ -20,11 +20,6 @@ class Helper {
     bool serviceEnabled;
     LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      Fluttertoast.showToast(msg: 'Location services are disabled.', backgroundColor: Colors.red);
-    }
-
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -35,6 +30,13 @@ class Helper {
 
     if (permission == LocationPermission.deniedForever) {
       Fluttertoast.showToast(msg: 'Location permissions are permanently denied, we cannot request permissions.Please turn on permission in settings', backgroundColor: Colors.red);
+    }
+
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Location services are disabled.');
+      await Geolocator.getCurrentPosition();
     }
     return serviceEnabled && (permission == LocationPermission.whileInUse || permission == LocationPermission.always);
   }
